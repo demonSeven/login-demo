@@ -2,13 +2,25 @@
 import { onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import Login from '../components/LoginFrom.vue'
+import api from '../api'
 
 const auth = useAuthStore()
 
 onMounted(() => {
+  fetchServerInfo()
+  
   //获取用户信息
   auth.fetchUser()
 })
+
+const fetchServerInfo = async () => {
+    try {
+      const response = await api.getServerInfo();
+      console.error(`Server Info: ${JSON.stringify(response.data)}`)
+    } catch (error) {
+      // 错误处理已在 store 中处理
+    }
+  }
 </script>
 
 <template>

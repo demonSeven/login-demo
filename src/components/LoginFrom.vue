@@ -5,8 +5,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
 
 const auth = useAuthStore()
 const form = ref({
-  email: 'test@example.com',
-  password: 'password'
+  email: '',
+  password: ''
 })
 
 const handleSubmit = async () => {
