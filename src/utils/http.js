@@ -1,21 +1,18 @@
 import axios from 'axios'
 import { useAuthStore } from '../stores/auth'
 import api from '../api'
+import Cookies from 'js-cookie';
 
 const http = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  }
 })
 
 // 获取 CSRF Token 的函数
 const getCsrfToken = () => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; XSRF-TOKEN=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
+  const CsrfToken = Cookies.get('laravel_session');
+  console.log('XSRF-TOKEN', CsrfToken);
+  return CsrfToken;
 }
 
 // 请求处理拦截器
@@ -25,7 +22,6 @@ http.interceptors.request.use(async (config) => {
     if (!getCsrfToken()) {
       await api.getCsrfCookie();
     }
-    console.log('getCsrfToken--->',getCsrfToken())
     config.headers['X-XSRF-TOKEN'] = getCsrfToken()
   }
   return config
@@ -33,9 +29,21 @@ http.interceptors.request.use(async (config) => {
 
 // 响应处理拦截器
 http.interceptors.response.use(
-  response => response,
+  response => {
+    // 获取响应头中的 Cookie
+    
+    console.log('12311232-->',response)
+    const cookies = response.headers.get('Set-cookie')
+    if (cookies) {
+      // 处理 Cookie（示例：存储到 Vuex/Pinia）
+      console.log('Received Cookies:', parseCookies(cookies))
+    }
+
+    return response;
+  },
   error => {
     const { status, data } = error.response || {}
+    getCsrfToken()
     switch (status) {
       case 401:
         console.error('未授权')
