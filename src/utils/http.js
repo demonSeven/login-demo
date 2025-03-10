@@ -13,22 +13,19 @@ const http = axios.create({
 
 // 获取 CSRF Token 的函数
 const getCsrfToken = () => {
-  const cookies = document.cookie.split(';')
-  console.log('cookie---->', cookie)
-  const tokenCookie = cookies.find(c => c.trim().startsWith('XSRF-TOKEN='))
-  return tokenCookie ? tokenCookie.split('=')[1] : null
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; XSRF-TOKEN=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
 // 请求处理拦截器
 http.interceptors.request.use(async (config) => {
-  const xsrfToken = getCookie('XSRF-TOKEN');
-  console.log('xsrfToken',xsrfToken)
-  
   if (['post', 'put', 'patch', 'delete'].includes(config.method.toLowerCase())) {
     //确保先获取 CSRF Cookie
     if (!getCsrfToken()) {
       await api.getCsrfCookie();
     }
+    console.log('getCsrfToken--->',getCsrfToken())
     config.headers['X-XSRF-TOKEN'] = getCsrfToken()
   }
   return config
