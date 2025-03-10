@@ -3,7 +3,11 @@ import { onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import Login from '../components/LoginFrom.vue'
 import api from '../api'
-import Cookies from 'js-cookie';
+import http from '../utils/http'
+
+import { useCookies } from "vue3-cookies";
+const { cookies } = useCookies();
+
 
 const auth = useAuthStore()
 
@@ -16,13 +20,10 @@ onMounted(() => {
 const fetchServerInfo = async () => {
     try {
       const response = await api.getServerInfo();
-      // 获取响应头中的 Cookie
-      const cookies = response.headers.get('set-cookie');
-      console.log('Cookie123s:', cookies);
-      console.error(`response.headers: ${JSON.stringify(response)}`)
-      const CsrfToken = Cookies.get('XSRF-TOKEN');
-      console.log('XSRF-TOKEN', CsrfToken);
-
+      console.error(`response666: ${JSON.stringify(response)}`)
+      console.log(response.headers['x-xsrf-token'])
+      console.log('XSRF-TOKEN---->',cookies.get, cookies.get('XSRF-TOKEN'));
+      
       //获取用户信息
       auth.fetchUser()
     } catch (error) {

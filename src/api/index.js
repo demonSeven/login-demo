@@ -3,7 +3,9 @@ import http from '../utils/http'
 export default {
 
   async getServerInfo() {
-    return http.get('/');
+    return http.get('/', {
+      withCredentials: true // 如果需要发送跨域请求的凭证（如 cookies）
+    });
   },
 
   async getCsrfCookie() {

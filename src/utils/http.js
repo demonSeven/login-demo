@@ -5,13 +5,13 @@ import Cookies from 'js-cookie';
 
 const http = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  withCredentials: true,
+  withCredentials: false,
 })
 
 // 获取 CSRF Token 的函数
 const getCsrfToken = () => {
   const CsrfToken = Cookies.get('laravel_session');
-  console.log('XSRF-TOKEN', CsrfToken);
+  console.log('XSRF-TOKEN111', CsrfToken);
   return CsrfToken;
 }
 
@@ -32,12 +32,12 @@ http.interceptors.response.use(
   response => {
     // 获取响应头中的 Cookie
     
-    console.log('12311232-->',response)
-    const cookies = response.headers.get('Set-cookie')
-    if (cookies) {
-      // 处理 Cookie（示例：存储到 Vuex/Pinia）
-      console.log('Received Cookies:', parseCookies(cookies))
-    }
+    console.log('response------>',response)
+    console.log('66623422->')
+    // if (cookies) {
+    //   // 处理 Cookie（示例：存储到 Vuex/Pinia）
+    //   console.log('Received Cookies:', parseCookies(cookies))
+    // }
 
     return response;
   },
