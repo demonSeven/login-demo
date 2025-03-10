@@ -4,7 +4,7 @@ export default {
 
   async getServerInfo() {
     return http.get('/', {
-      withCredentials: true // 如果需要发送跨域请求的凭证（如 cookies）
+      withCredentials: true
     });
   },
 

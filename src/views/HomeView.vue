@@ -8,24 +8,25 @@ import http from '../utils/http'
 import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
 
+import Cookies from 'js-cookie'
+
 
 const auth = useAuthStore()
 
 onMounted(() => {
   fetchServerInfo()
-  
-  
+  //获取用户信息
+  auth.fetchUser()
 })
 
 const fetchServerInfo = async () => {
     try {
       const response = await api.getServerInfo();
       console.error(`response666: ${JSON.stringify(response)}`)
-      console.log(response.headers['x-xsrf-token'])
-      console.log('XSRF-TOKEN---->',cookies.get, cookies.get('XSRF-TOKEN'));
+      console.log('XSRF-TOKEN--666-->', document.cookie, cookies.get('XSRF-TOKEN1'));
+      console.log('Set-Cookie123:', response.headers['set-cookie']);
+      console.log('XSRF-TOKEN--111->', Cookies, Cookies.get('XSRF-TOKEN1'))
       
-      //获取用户信息
-      auth.fetchUser()
     } catch (error) {
       // 错误处理已在 store 中处理
     }
