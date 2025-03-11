@@ -5,7 +5,8 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
     isLoading: false,
-    error: null
+    error: null,
+    csrfToken: ''
   }),
 
   actions: {
@@ -33,6 +34,12 @@ export const useAuthStore = defineStore('auth', {
         this.user = response.data
       } catch (error) {
         this.user = null
+      }
+    },
+
+    updateCsrfToken(data) {
+      if(data){
+        this.csrfToken = data;
       }
     }
   }

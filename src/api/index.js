@@ -3,9 +3,7 @@ import http from '../utils/http'
 export default {
 
   async getServerInfo() {
-    return http.get('/', {
-      withCredentials: true
-    });
+    return http.get('/');
   },
 
   async getCsrfCookie() {
